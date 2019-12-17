@@ -1,0 +1,5 @@
+#!/bin/bash
+
+rm -r test.db
+go build
+./server
