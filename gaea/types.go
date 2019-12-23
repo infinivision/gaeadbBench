@@ -3,5 +3,6 @@ package gaea
 import "github.com/infinivision/gaeadb/db"
 
 type gaStore struct {
-	db db.DB
+	cnt uint64
+	db  db.DB
 }

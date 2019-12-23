@@ -4,15 +4,24 @@ import (
 	"runtime"
 	"syscall"
 
-	"github.com/infinivision/gaeadbBench/gaea"
+	//	_ "net/http/pprof"
+
+	"github.com/infinivision/gaeadbBench/badger"
 	"github.com/infinivision/gaeadbBench/protocol"
 )
 
 func main() {
 	enlargelimit()
-	s := protocol.New(6378, gaea.New("test.db"))
+	/*
+		{
+			go func() {
+				log.Println(http.ListenAndServe("localhost:6060", nil))
+			}()
+		}
+	*/
+	//s := protocol.New(6378, gaea.New("test.db"))
 	//s := protocol.New(6378, bolt.New("test.db"))
-	//s := protocol.New(6378, badger.New("test.db"))
+	s := protocol.New(6378, badger.New("test.db"))
 	s.Run()
 }
 

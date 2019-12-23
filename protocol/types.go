@@ -3,16 +3,19 @@ package protocol
 import (
 	"net"
 	"net/textproto"
-
-	"github.com/nnsgmsone/units/breaker"
 )
 
 type DB interface {
 	Close() error
 
+	// kv
 	Del([]byte) error
 	Set([]byte, []byte) error
 	Get([]byte) ([]byte, error)
+
+	// list
+	Lpush([]byte, []byte) (uint64, error)
+	Lrange([]byte, uint64, uint64) ([][]byte, error)
 }
 
 type Server interface {
@@ -32,13 +35,6 @@ type server struct {
 	db  DB
 	lis net.Listener
 	ch  chan struct{}
-	brk breaker.Breaker
-}
-
-type connection struct {
-	state int
-	s     *server
-	conn  net.Conn
 }
 
 type request struct {
@@ -49,6 +45,6 @@ type response struct {
 	w *textproto.Writer
 }
 
-type dealFunc (func(DB, responseWriter, [][]byte))
+type dealFunc (func(DB, responseWriter, [][]byte) error)
 
 var dealRegister map[string]dealFunc

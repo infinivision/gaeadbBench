@@ -2,13 +2,9 @@ package protocol
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
-	"io"
 	"net"
 	"net/textproto"
-
-	"github.com/nnsgmsone/units/breaker"
 )
 
 func New(port int, db DB) Server {
@@ -16,9 +12,7 @@ func New(port int, db DB) Server {
 	if err != nil {
 		return nil
 	}
-	cfg := breaker.DefaultConfig()
-	cfg.MaxRequests = 1000000 // 100w tps / 10s
-	return &server{db, lis, make(chan struct{}), breaker.New(cfg)}
+	return &server{db, lis, make(chan struct{})}
 }
 
 func (s *server) Run() {
@@ -45,7 +39,7 @@ func (s *server) Run() {
 			s.ch <- struct{}{}
 			return
 		case conn := <-ch:
-			go s.brk.NewConnection(&connection{0, s, conn})
+			go s.process(conn)
 		}
 	}
 }
@@ -57,42 +51,21 @@ func (s *server) Stop() {
 	return
 }
 
-func (c *connection) Response() error {
-	resp := &response{textproto.NewWriter(bufio.NewWriter(c.conn))}
-	resp.respSimple("ok")
-	req, err := readRequest(bufio.NewReader(c.conn))
-	if err != nil {
-		c.state = -1
-		if err != io.EOF {
-			resp.respError(errors.New("illegal request"))
-		}
-		return err
-	}
-	f, ok := dealRegister[string(req.args[0])]
-	if !ok {
-		c.state = -1
-		err = fmt.Errorf("unknown command '%s'", string(req.args[0]))
-		resp.respError(err)
-		return err
-	}
-	f(c.s.db, resp, req.args[1:])
-	return nil
-}
-
-func (c *connection) Close() error {
-	return c.conn.Close()
-}
-
-func (c *connection) Serve() error {
+func (s *server) process(c net.Conn) {
 	for {
-		if err := c.s.brk.NewRequest(c); err != nil {
-			resp := &response{textproto.NewWriter(bufio.NewWriter(c.conn))}
-			resp.respError(err)
-			break
+		resp := &response{textproto.NewWriter(bufio.NewWriter(c))}
+		req, err := readRequest(bufio.NewReader(c))
+		if err != nil {
+			return
 		}
-		if c.state != 0 {
-			break
+		f, ok := dealRegister[string(req.args[0])]
+		if !ok {
+			err = fmt.Errorf("unknown command '%s'", string(req.args[0]))
+			resp.respError(err)
+			return
+		}
+		if err := f(s.db, resp, req.args[1:]); err != nil {
+			//		fmt.Printf("failed to deal %s\n", string(req.args[0]))
 		}
 	}
-	return nil
 }

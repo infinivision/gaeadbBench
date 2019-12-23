@@ -3,5 +3,6 @@ package bolt
 import "github.com/boltdb/bolt"
 
 type btStore struct {
-	db *bolt.DB
+	cnt uint64
+	db  *bolt.DB
 }
