@@ -30,8 +30,8 @@
 
 ### gaeadb
 
-    SET: 10080.65 requests per second
-    GET: 1415.63 requests per second
+    SET: 662.96 requests per second
+    GET: 5804.50 requests per second
     LPUSH (needed to benchmark LRANGE): 10341.26 requests per second
     LRANGE_100 (first 100 elements): 885.50 requests per second
     LRANGE_300 (first 300 elements): 315.52 requests per second
@@ -66,13 +66,13 @@
 
 ### gaeadb
 
-    SET: 21451.49 requests per second
-    GET: 922.99 requests per second
+    SET: 4153.55 requests per second
+    GET: 21363.78 requests per second
     LPUSH (needed to benchmark LRANGE): 20776.15 requests per second
-    LRANGE_100 (first 100 elements): 2687.88 requests per second
-    LRANGE_300 (first 300 elements): 1005.61 requests per second
-    LRANGE_500 (first 450 elements): 713.97 requests per second
-    LRANGE_600 (first 600 elements): 549.56 requests per second
+    LRANGE_100 (first 100 elements): 3444.59 requests per second
+    LRANGE_300 (first 300 elements): 1296.65 requests per second
+    LRANGE_500 (first 450 elements): 911.50 requests per second
+    LRANGE_600 (first 600 elements): 720.85 requests per second
 
 ## SSD Single Thread
 
@@ -102,8 +102,8 @@
 
 ### gaeadb
 
-    SET: 10615.71 requests per second
-    GET: 1534.68 requests per second
+    SET: 4 requests per second
+    GET: 6538.94 requests per second
     LPUSH (needed to benchmark LRANGE): 11210.76 requests per second
     LRANGE_100 (first 100 elements): 899.44 requests per second
     LRANGE_300 (first 300 elements): 316.47 requests per second
@@ -138,10 +138,10 @@
 
 ### gaeadb
 
-    SET: 23828.25 requests per second
-    GET: 1064.96 requests per second
+    SET: 4313.69 requests per second
+    GET: 22168.08 requests per second
     LPUSH (needed to benchmark LRANGE): 19106.91 requests per second
-    LRANGE_100 (first 100 elements): 2426.90 requests per second
-    LRANGE_300 (first 300 elements): 944.48 requests per second
-    LRANGE_500 (first 450 elements): 707.93 requests per second
-    LRANGE_600 (first 600 elements): 550.01 requests per second
+    LRANGE_100 (first 100 elements): 3526.71 requests per second
+    LRANGE_300 (first 300 elements): 1300.00 requests per second
+    LRANGE_500 (first 450 elements): 910.75 requests per second
+    LRANGE_600 (first 600 elements): 725.24 requests per second
