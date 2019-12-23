@@ -102,7 +102,7 @@
 
 ### gaeadb
 
-    SET: 4 requests per second
+    SET: 801.49 requests per second
     GET: 6538.94 requests per second
     LPUSH (needed to benchmark LRANGE): 11210.76 requests per second
     LRANGE_100 (first 100 elements): 899.44 requests per second
